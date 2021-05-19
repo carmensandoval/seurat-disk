@@ -1,3 +1,6 @@
+# 2021-05-18 CSE
+# Add option to store @counts in raw
+
 #' @include zzz.R
 #' @include Connect.R
 #' @include TestObject.R
@@ -908,6 +911,9 @@ H5SeuratToH5AD <- function(
   overwrite = FALSE,
   verbose = TRUE
 ) {
+  
+  message("• Using custom H5SeuratToH5AD.R • ")
+  
   if (file.exists(dest)) {
     if (overwrite) {
       file.remove(dest)
@@ -916,7 +922,9 @@ H5SeuratToH5AD <- function(
     }
   }
   rownames <- '_index'
+  
   dfile <- H5File$new(filename = dest, mode = WriteMode(overwrite = FALSE))
+  
   # Transfer data frames from h5Seurat files to H5AD files
   #
   # @param src Source dataset
@@ -1024,7 +1032,7 @@ H5SeuratToH5AD <- function(
   assay.group <- source[['assays']][[assay]]
   if (source$index()[[assay]]$slots[['scale.data']]) {
     x.data <- 'scale.data'
-    raw.data <- 'data'
+    raw.data <- 'counts'
   } else {
     x.data <- 'data'
     raw.data <- if (source$index()[[assay]]$slots[['counts']]) {
